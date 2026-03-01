@@ -1,0 +1,203 @@
+/* ========================================
+   PROJECTS SECTION
+   ======================================== */
+.projects {
+     padding: var(--section-padding);
+     position: relative;
+}
+
+.projects__filters {
+     display: flex;
+     gap: 8px;
+     margin: 40px 0 36px;
+     flex-wrap: wrap;
+}
+
+.projects__filter {
+     padding: 8px 20px;
+     font-size: 0.85rem;
+     font-weight: 500;
+     color: var(--text-secondary);
+     background: var(--bg-card);
+     border: 1px solid var(--border-glass);
+     border-radius: var(--radius-full);
+     transition: all var(--transition-fast);
+}
+
+.projects__filter:hover {
+     color: var(--text-primary);
+     border-color: rgba(108, 92, 231, 0.3);
+}
+
+.projects__filter--active {
+     background: var(--gradient-primary);
+     color: white;
+     border-color: transparent;
+}
+
+.projects__grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+     gap: 24px;
+}
+
+.projects__card {
+     overflow: hidden;
+     padding: 0;
+}
+
+.projects__card:hover {
+     transform: translateY(-6px);
+}
+
+.projects__card-image {
+     position: relative;
+     width: 100%;
+     height: 220px;
+     overflow: hidden;
+}
+
+.projects__card-image img {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     transition: transform var(--transition-slow);
+}
+
+.projects__card:hover .projects__card-image img {
+     transform: scale(1.05);
+}
+
+.projects__card-overlay {
+     position: absolute;
+     inset: 0;
+     background: rgba(10, 10, 15, 0.7);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 16px;
+     opacity: 0;
+     transition: all var(--transition-base);
+}
+
+.projects__card-overlay--visible {
+     opacity: 1;
+}
+
+.projects__card-link {
+     width: 44px;
+     height: 44px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     background: rgba(255, 255, 255, 0.1);
+     border: 1px solid rgba(255, 255, 255, 0.2);
+     border-radius: 50%;
+     color: white;
+     font-size: 1.1rem;
+     transition: all var(--transition-fast);
+     backdrop-filter: blur(10px);
+}
+
+.projects__card-link:hover {
+     background: var(--accent-primary);
+     border-color: var(--accent-primary);
+     transform: scale(1.1);
+}
+
+.projects__card-accent {
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     width: 100%;
+     height: 3px;
+     opacity: 0.6;
+}
+
+.projects__card-body {
+     padding: 24px;
+}
+
+.projects__card-subtitle {
+     font-family: var(--font-mono);
+     font-size: 0.75rem;
+     color: var(--accent-primary);
+     text-transform: uppercase;
+     letter-spacing: 1.5px;
+     margin-bottom: 4px;
+     display: block;
+}
+
+.projects__card-title {
+     font-size: 1.15rem;
+     font-weight: 700;
+     margin-bottom: 10px;
+     color: var(--text-primary);
+}
+
+.projects__card-description {
+     font-size: 0.9rem;
+     color: var(--text-secondary);
+     line-height: 1.6;
+     margin-bottom: 14px;
+}
+
+.projects__card-highlights {
+     margin-bottom: 16px;
+     padding-left: 0;
+}
+
+.projects__card-highlights li {
+     position: relative;
+     padding-left: 18px;
+     margin-bottom: 6px;
+     font-size: 0.83rem;
+     color: var(--text-secondary);
+     line-height: 1.5;
+}
+
+.projects__card-highlights li::before {
+     content: '▹';
+     position: absolute;
+     left: 0;
+     color: var(--accent-primary);
+     font-weight: bold;
+}
+
+.projects__card-tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 6px;
+     margin-bottom: 16px;
+}
+
+.projects__card-tag {
+     padding: 4px 12px;
+     font-size: 0.75rem;
+     font-family: var(--font-mono);
+     color: var(--accent-secondary);
+     background: rgba(108, 92, 231, 0.08);
+     border: 1px solid rgba(108, 92, 231, 0.15);
+     border-radius: var(--radius-full);
+}
+
+.projects__card-cta {
+     display: inline-flex;
+     align-items: center;
+     gap: 6px;
+     font-size: 0.9rem;
+     font-weight: 600;
+     color: var(--accent-primary);
+     transition: all var(--transition-fast);
+}
+
+.projects__card-cta:hover {
+     gap: 12px;
+     color: var(--accent-secondary);
+}
+
+@media (max-width: 768px) {
+     .projects__grid {
+          grid-template-columns: 1fr;
+     }
+}

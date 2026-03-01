@@ -1,0 +1,52 @@
+/* ========================================
+   PARTICLE BACKGROUND
+   ======================================== */
+.particles {
+     position: fixed;
+     inset: 0;
+     pointer-events: none;
+     z-index: 0;
+     overflow: hidden;
+}
+
+.particle {
+     position: absolute;
+     background: rgba(108, 92, 231, 0.3);
+     border-radius: 50%;
+     animation: particle-float linear infinite;
+}
+
+@keyframes particle-float {
+     0% {
+          transform: translateY(0) translateX(0);
+          opacity: 0;
+     }
+
+     10% {
+          opacity: 1;
+     }
+
+     90% {
+          opacity: 1;
+     }
+
+     100% {
+          transform: translateY(-100vh) translateX(50px);
+          opacity: 0;
+     }
+}
+
+/* ========================================
+   SCROLL PROGRESS
+   ======================================== */
+.scroll-progress {
+     position: fixed;
+     top: 0;
+     left: 0;
+     height: 3px;
+     background: var(--gradient-primary);
+     z-index: 10000;
+     transition: width 0.1s linear;
+     border-radius: 0 2px 2px 0;
+     box-shadow: 0 0 10px rgba(108, 92, 231, 0.5);
+}
