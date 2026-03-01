@@ -184,6 +184,27 @@ a.contact__info-value:hover {
      box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
 }
 
+.contact__form-submit:disabled {
+     opacity: 0.75;
+     cursor: not-allowed;
+     transform: none;
+     box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.contact__form-message {
+     margin: 0 0 14px;
+     font-size: 0.86rem;
+     font-weight: 500;
+}
+
+.contact__form-message--success {
+     color: #7dd3a9;
+}
+
+.contact__form-message--error {
+     color: #ff9a9a;
+}
+
 @media (max-width: 900px) {
      .contact__content {
           grid-template-columns: 1fr;

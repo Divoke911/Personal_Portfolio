@@ -5,16 +5,53 @@ import { FiSend, FiArrowUpRight } from 'react-icons/fi';
 import { contactInfo, socialLinks } from '../../../data';
 import './Contact.css';
 
+const WEB3FORMS_ACCESS_KEY = '336a64b3-9632-4170-b74a-81d8b42d1616';
+
 export default function Contact() {
      const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
      const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+     const [sending, setSending] = useState(false);
      const [submitted, setSubmitted] = useState(false);
+     const [error, setError] = useState('');
 
-     const handleSubmit = (e) => {
+     const handleSubmit = async (e) => {
           e.preventDefault();
-          setSubmitted(true);
-          setTimeout(() => setSubmitted(false), 4000);
-          setFormData({ name: '', email: '', message: '' });
+          if (sending) return;
+
+          setSending(true);
+          setSubmitted(false);
+          setError('');
+
+          try {
+               const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: {
+                         'Content-Type': 'application/json',
+                         Accept: 'application/json',
+                    },
+                    body: JSON.stringify({
+                         access_key: WEB3FORMS_ACCESS_KEY,
+                         name: formData.name,
+                         email: formData.email,
+                         message: formData.message,
+                         subject: `New portfolio contact from ${formData.name}`,
+                         from_name: 'Portfolio Contact Form',
+                    }),
+               });
+
+               const result = await response.json();
+               if (!response.ok || !result.success) {
+                    throw new Error(result.message || 'Message failed');
+               }
+
+               setSubmitted(true);
+               setFormData({ name: '', email: '', message: '' });
+               setTimeout(() => setSubmitted(false), 4000);
+          } catch {
+               setError('Could not send your message. Please try again.');
+          } finally {
+               setSending(false);
+          }
      };
 
      return (
@@ -87,21 +124,48 @@ export default function Contact() {
                          >
                               <div className="contact__form-group">
                                    <label htmlFor="contact-name" className="contact__form-label">Name</label>
-                                   <input id="contact-name" type="text" className="contact__form-input" placeholder="Your name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+                                   <input
+                                        id="contact-name"
+                                        type="text"
+                                        className="contact__form-input"
+                                        placeholder="Your name"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        required
+                                   />
                               </div>
 
                               <div className="contact__form-group">
                                    <label htmlFor="contact-email" className="contact__form-label">Email</label>
-                                   <input id="contact-email" type="email" className="contact__form-input" placeholder="your@email.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required />
+                                   <input
+                                        id="contact-email"
+                                        type="email"
+                                        className="contact__form-input"
+                                        placeholder="your@email.com"
+                                        value={formData.email}
+                                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        required
+                                   />
                               </div>
 
                               <div className="contact__form-group">
                                    <label htmlFor="contact-message" className="contact__form-label">Message</label>
-                                   <textarea id="contact-message" className="contact__form-input contact__form-textarea" placeholder="Tell me about your project..." rows={5} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} required />
+                                   <textarea
+                                        id="contact-message"
+                                        className="contact__form-input contact__form-textarea"
+                                        placeholder="Tell me about your project..."
+                                        rows={5}
+                                        value={formData.message}
+                                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                        required
+                                   />
                               </div>
 
-                              <button type="submit" className="contact__form-submit">
-                                   {submitted ? <>✓ Message Sent!</> : <><FiSend /> Send Message</>}
+                              {submitted && <p className="contact__form-message contact__form-message--success">Message sent successfully.</p>}
+                              {error && <p className="contact__form-message contact__form-message--error">{error}</p>}
+
+                              <button type="submit" className="contact__form-submit" disabled={sending}>
+                                   {sending ? 'Sending...' : submitted ? 'Message Sent' : <><FiSend /> Send Message</>}
                               </button>
                          </motion.form>
                     </div>

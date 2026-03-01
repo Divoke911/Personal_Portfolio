@@ -6,7 +6,6 @@ export const personalInfo = {
      role: 'Full Stack Developer',
      email: 'sahil.kawale911@gmail.com',
      location: 'Mumbai, India',
-     portfolioUrl: 'https://divoke911.github.io',
      tagline: 'Full Stack Developer specializing in Java & Spring Boot.',
      heroDescription:
           'Full Stack Developer specializing in Java and Spring Boot, with hands-on experience building production-style projects like e-commerce platforms, food delivery backends, and task management tools. Passionate about clean architecture and reliable software.',
@@ -25,7 +24,6 @@ export const socialLinks = [
      { icon: FiGithub, label: 'GitHub', username: 'Divoke911', href: 'https://github.com/Divoke911' },
      { icon: SiStackoverflow, label: 'Stack Overflow', username: 'Sahil Kawale', href: 'https://stackoverflow.com/users/sahil-kawale' },
      { icon: FiLinkedin, label: 'LinkedIn', username: 'Sahil Kawale', href: 'https://linkedin.com/in/sahil-kawale' },
-     { icon: FiGlobe, label: 'Portfolio', username: 'divoke911.github.io', href: 'https://divoke911.github.io' },
 ];
 
 export const contactInfo = [
