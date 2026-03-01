@@ -42,7 +42,7 @@ export default function Navbar() {
                     <div className="navbar__container container">
                          <a href="#home" className="navbar__logo" onClick={() => handleClick('#home')}>
                               <span className="navbar__logo-bracket">&lt;</span>
-                              <span className="navbar__logo-text">Developer</span>
+                              <span className="navbar__logo-text">Sahil</span>
                               <span className="navbar__logo-bracket">/&gt;</span>
                          </a>
 
