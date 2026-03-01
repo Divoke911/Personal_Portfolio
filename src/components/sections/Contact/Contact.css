@@ -163,6 +163,14 @@ a.contact__info-value:hover {
      min-height: 120px;
 }
 
+.contact__honeypot {
+     position: absolute;
+     left: -5000px;
+     width: 1px;
+     height: 1px;
+     overflow: hidden;
+}
+
 .contact__form-submit {
      width: 100%;
      padding: 14px 28px;

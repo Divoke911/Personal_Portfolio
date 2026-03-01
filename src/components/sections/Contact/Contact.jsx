@@ -5,11 +5,18 @@ import { FiSend, FiArrowUpRight } from 'react-icons/fi';
 import { contactInfo, socialLinks } from '../../../data';
 import './Contact.css';
 
-const WEB3FORMS_ACCESS_KEY = '336a64b3-9632-4170-b74a-81d8b42d1616';
+const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY?.trim() || '336a64b3-9632-4170-b74a-81d8b42d1616';
+const SUBMISSION_COOLDOWN_MS = 30_000;
+const REQUEST_TIMEOUT_MS = 15_000;
+
+function isValidEmail(email) {
+     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
 
 export default function Contact() {
      const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
-     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+     const [formData, setFormData] = useState({ name: '', email: '', message: '', website: '' });
      const [sending, setSending] = useState(false);
      const [submitted, setSubmitted] = useState(false);
      const [error, setError] = useState('');
@@ -23,7 +30,35 @@ export default function Contact() {
           setError('');
 
           try {
-               const response = await fetch('https://api.web3forms.com/submit', {
+               if (formData.website.trim() !== '') {
+                    setSubmitted(true);
+                    setFormData({ name: '', email: '', message: '', website: '' });
+                    return;
+               }
+
+               const name = formData.name.trim();
+               const email = formData.email.trim().toLowerCase();
+               const message = formData.message.trim();
+
+               if (name.length < 2 || name.length > 100) {
+                    throw new Error('Please enter a valid name');
+               }
+               if (!isValidEmail(email) || email.length > 254) {
+                    throw new Error('Please enter a valid email');
+               }
+               if (message.length < 10 || message.length > 2000) {
+                    throw new Error('Message must be between 10 and 2000 characters');
+               }
+
+               const lastSubmitted = Number(localStorage.getItem('contact_form_last_submitted_ms') || 0);
+               if (Date.now() - lastSubmitted < SUBMISSION_COOLDOWN_MS) {
+                    throw new Error('Please wait 30 seconds before sending another message');
+               }
+
+               const controller = new AbortController();
+               const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+               const response = await fetch(WEB3FORMS_ENDPOINT, {
                     method: 'POST',
                     headers: {
                          'Content-Type': 'application/json',
@@ -31,24 +66,33 @@ export default function Contact() {
                     },
                     body: JSON.stringify({
                          access_key: WEB3FORMS_ACCESS_KEY,
-                         name: formData.name,
-                         email: formData.email,
-                         message: formData.message,
-                         subject: `New portfolio contact from ${formData.name}`,
+                         name,
+                         email,
+                         message,
+                         botcheck: '',
+                         replyto: email,
+                         subject: `New portfolio contact from ${name}`,
                          from_name: 'Portfolio Contact Form',
                     }),
+                    signal: controller.signal,
                });
+               clearTimeout(timeoutId);
 
                const result = await response.json();
                if (!response.ok || !result.success) {
                     throw new Error(result.message || 'Message failed');
                }
 
+               localStorage.setItem('contact_form_last_submitted_ms', String(Date.now()));
                setSubmitted(true);
-               setFormData({ name: '', email: '', message: '' });
+               setFormData({ name: '', email: '', message: '', website: '' });
                setTimeout(() => setSubmitted(false), 4000);
-          } catch {
-               setError('Could not send your message. Please try again.');
+          } catch (submitError) {
+               if (submitError.name === 'AbortError') {
+                    setError('Request timed out. Please try again.');
+                    return;
+               }
+               setError(submitError.message || 'Could not send your message. Please try again.');
           } finally {
                setSending(false);
           }
@@ -128,9 +172,11 @@ export default function Contact() {
                                         id="contact-name"
                                         type="text"
                                         className="contact__form-input"
-                                        placeholder="Your name"
-                                        value={formData.name}
+                                         placeholder="Your name"
+                                         value={formData.name}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        maxLength={100}
+                                        autoComplete="name"
                                         required
                                    />
                               </div>
@@ -141,9 +187,11 @@ export default function Contact() {
                                         id="contact-email"
                                         type="email"
                                         className="contact__form-input"
-                                        placeholder="your@email.com"
-                                        value={formData.email}
+                                         placeholder="your@email.com"
+                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        maxLength={254}
+                                        autoComplete="email"
                                         required
                                    />
                               </div>
@@ -153,11 +201,24 @@ export default function Contact() {
                                    <textarea
                                         id="contact-message"
                                         className="contact__form-input contact__form-textarea"
-                                        placeholder="Tell me about your project..."
-                                        rows={5}
-                                        value={formData.message}
+                                         placeholder="Tell me about your project..."
+                                         rows={5}
+                                         value={formData.message}
                                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                                        maxLength={2000}
                                         required
+                                   />
+                              </div>
+
+                              <div className="contact__honeypot" aria-hidden="true">
+                                   <label htmlFor="contact-website">Website</label>
+                                   <input
+                                        id="contact-website"
+                                        type="text"
+                                        tabIndex={-1}
+                                        autoComplete="off"
+                                        value={formData.website}
+                                        onChange={(e) => setFormData({ ...formData, website: e.target.value })}
                                    />
                               </div>
 
