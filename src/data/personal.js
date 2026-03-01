@@ -22,7 +22,7 @@ export const navLinks = [
 
 export const socialLinks = [
      { icon: FiGithub, label: 'GitHub', username: 'Divoke911', href: 'https://github.com/Divoke911' },
-     { icon: SiStackoverflow, label: 'Stack Overflow', username: 'Sahil Kawale', href: 'https://stackoverflow.com/users/sahil-kawale' },
+     { icon: SiStackoverflow, label: 'Stack Overflow', username: 'Sahil Kawale', href: 'https://stackoverflow.com/users/29257538/sahil-kawale' },
      { icon: FiLinkedin, label: 'LinkedIn', username: 'Sahil Kawale', href: 'https://linkedin.com/in/sahil-kawale' },
 ];
 
