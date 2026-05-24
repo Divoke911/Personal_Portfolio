@@ -73,7 +73,7 @@ export default function Hero() {
                               <a href="#projects" className="hero__btn hero__btn--primary">
                                    View My Work <FiArrowDownRight />
                               </a>
-                              <a href="/resume.pdf" className="hero__btn hero__btn--secondary" target="_blank" rel="noopener noreferrer">
+                              <a href="/DEVRESUME.pdf" download="Sahil_Resume.pdf" className="hero__btn hero__btn--secondary" target="_blank" rel="noopener noreferrer">
                                    <FiDownload /> Resume
                               </a>
                          </motion.div>
